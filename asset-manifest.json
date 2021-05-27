@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/solidity-todo-example/static/css/main.6dea0f05.chunk.css",
+    "main.js": "/solidity-todo-example/static/js/main.f31a0b72.chunk.js",
+    "main.js.map": "/solidity-todo-example/static/js/main.f31a0b72.chunk.js.map",
+    "runtime-main.js": "/solidity-todo-example/static/js/runtime-main.ee8dbec2.js",
+    "runtime-main.js.map": "/solidity-todo-example/static/js/runtime-main.ee8dbec2.js.map",
+    "static/js/2.bd2f7123.chunk.js": "/solidity-todo-example/static/js/2.bd2f7123.chunk.js",
+    "static/js/2.bd2f7123.chunk.js.map": "/solidity-todo-example/static/js/2.bd2f7123.chunk.js.map",
+    "static/js/3.60e1baf2.chunk.js": "/solidity-todo-example/static/js/3.60e1baf2.chunk.js",
+    "static/js/3.60e1baf2.chunk.js.map": "/solidity-todo-example/static/js/3.60e1baf2.chunk.js.map",
+    "index.html": "/solidity-todo-example/index.html",
+    "static/css/main.6dea0f05.chunk.css.map": "/solidity-todo-example/static/css/main.6dea0f05.chunk.css.map",
+    "static/js/2.bd2f7123.chunk.js.LICENSE.txt": "/solidity-todo-example/static/js/2.bd2f7123.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.ee8dbec2.js",
+    "static/js/2.bd2f7123.chunk.js",
+    "static/css/main.6dea0f05.chunk.css",
+    "static/js/main.f31a0b72.chunk.js"
+  ]
+}
