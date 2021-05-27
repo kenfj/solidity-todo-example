@@ -1,0 +1,5 @@
+{
+    "editor.formatOnSave": true,
+    "files.insertFinalNewline": true,
+    "solidity.compileUsingRemoteVersion": "v0.8.3+commit.8d00100c",
+}
