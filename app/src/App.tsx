@@ -31,7 +31,7 @@ function App() {
   const [appMsg, setAppMsg] = useState<AppMsg>(["info", ""])
 
   const [isDark, toggleDark] = useDarkMode()
-  const [{ wallet, network, account, theWeb3 }, connectNetwork] = useNetwork()
+  const [{ wallet, network, account, theWeb3, isConnected }, connectNetwork, disconnectNetwork] = useNetwork({ setAppMsg })
   const [tasks, { createTask, toggleDone, deleteTask }] = useTodoApi({ theWeb3, account, setAppMsg })
 
   // React + Material-UIでダークモードを実装してみた
@@ -48,8 +48,8 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <ToDoAppBar {...{ wallet, network, account }} connectNetwork={connectNetwork} setAppMsg={setAppMsg} />
-      <Alert severity="info" className={classes.alert}>Try connect Ropsten</Alert>
+      <ToDoAppBar {...{ wallet, network, account, isConnected, connectNetwork, disconnectNetwork, setAppMsg }} />
+      <Alert severity="info" className={classes.alert}>Try connect Ropsten test network by MetaMask</Alert>
 
       <Paper elevation={5} className={classes.paper}>
         <Grid container spacing={5}>

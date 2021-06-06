@@ -18,10 +18,23 @@ const useTodoApi: TodoApi = ({ theWeb3, account, setAppMsg }: TodoApiProps) => {
 
   useEffect(() => {
     const initToDo = async () => {
-      if (theWeb3 === undefined) return
+      if (theWeb3 === undefined) {
+        setTodo(undefined)
+        setTaskIds([])
+        setTasks([])
+        return
+      }
 
       const networkId = await theWeb3.eth.net.getId()
       const network = (ToDoJson.networks as any)[networkId]
+
+      if (network === undefined) {
+        logError(`Contract address not found in Network Id ${networkId}`)
+        setTodo(undefined)
+        setTaskIds([])
+        setTasks([])
+        return
+      }
 
       const abi = ToDoJson.abi as AbiItem[]
       const address = network && network.address
@@ -40,7 +53,11 @@ const useTodoApi: TodoApi = ({ theWeb3, account, setAppMsg }: TodoApiProps) => {
   // Approach 3: using getTaskIds()
   // https://eattheblocks.com/todo-list-ethereum-dapp-step8/
   const refreshTaskIds = useCallback(async () => {
-    if (todo === undefined) return
+    if (todo === undefined) {
+      setTaskIds([])
+      setTasks([])
+      return
+    }
 
     try {
       const ids = await todo.methods.getTaskIds().call()

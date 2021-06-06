@@ -24,9 +24,12 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: "14"
-      - run: npm ci
+      # avoid using npm ci https://github.com/actions/setup-node/issues/214
+      - run: npm install
       - run: npm test
       - name: deploy gh-pages
+        env:
+          REACT_APP_INFURA_ID: ${{secrets.REACT_APP_INFURA_ID}}
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com

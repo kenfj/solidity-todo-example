@@ -6,7 +6,9 @@ type Props = {
   wallet: string,
   account: string,
   network: string,
+  isConnected: boolean,
   connectNetwork: () => Promise<void>,
+  disconnectNetwork: () => Promise<void>,
   setAppMsg: Dispatch<SetStateAction<AppMsg>>,
 }
 
@@ -25,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function ToDoAppBar({ wallet, network, account, connectNetwork, setAppMsg }: Props) {
+function ToDoAppBar({ wallet, network, account, isConnected, connectNetwork, disconnectNetwork, setAppMsg }: Props) {
   const classes = useStyles();
 
   const [enableConnBtn, setEnableConnBtn] = useState<boolean>(true)
@@ -33,14 +35,32 @@ function ToDoAppBar({ wallet, network, account, connectNetwork, setAppMsg }: Pro
   const handleConnect = () => {
     setEnableConnBtn(false)
 
+    if (!isConnected) {
+      connect()
+    } else {
+      disconnect()
+    }
+
+    setEnableConnBtn(true)
+  }
+
+  const connect = () => {
     connectNetwork().then(() => {
       setAppMsg(["info", "Connected"])
-
-      setEnableConnBtn(true)
     }).catch(err => {
-      setAppMsg(["error", `Error in Connect Network: ${err.message}`])
+      if (err === undefined) {
+        setAppMsg(["info", "Connect Request Cancelled"])
+      } else {
+        setAppMsg(["error", `Error in Connect Network: ${err.message}`])
+      }
+    })
+  }
 
-      setEnableConnBtn(true)
+  const disconnect = () => {
+    disconnectNetwork().then(() => {
+      setAppMsg(["info", "Disconnected"])
+    }).catch(err => {
+      setAppMsg(["error", `Error in Disconnect Network: ${err.message}`])
     })
   }
 
@@ -67,7 +87,7 @@ function ToDoAppBar({ wallet, network, account, connectNetwork, setAppMsg }: Pro
             variant="outlined"
             disabled={!enableConnBtn}
             onClick={handleConnect}>
-            Connect
+            {isConnected ? "Disconnect" : "Connect"}
           </Button>
         </Toolbar>
       </AppBar>

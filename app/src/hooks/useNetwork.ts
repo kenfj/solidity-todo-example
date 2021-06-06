@@ -1,11 +1,14 @@
+import WalletConnectProvider from "@walletconnect/web3-provider";
 import { useEffect, useState } from 'react';
 import Web3 from 'web3';
+import Web3Modal from "web3modal";
+import { NetworkProps } from "../Types";
 
 // https://stackoverflow.com/questions/56457935
 declare global {
   interface Window {
     ethereum: any
-    web3: string
+    web3: any
   }
 }
 
@@ -40,11 +43,30 @@ declare global {
 // ethereum.enable() (DEPRECATED)
 // https://docs.metamask.io/guide/ethereum-provider.html#ethereum-enable-deprecated
 
-function useNetwork() {
+// save REACT_APP_INFURA_ID in .env.local for local development
+// https://qiita.com/geekduck/items/6f99a3da15dd39658fff#開発環境、本番環境でアプリに渡す環境変数を切り替えたい
+const providerOptions = {
+  walletconnect: {
+    package: WalletConnectProvider,
+    options: {
+      infuraId: process.env.REACT_APP_INFURA_ID,
+    }
+  }
+}
+
+// Note: TrustWallet cannot connect to ropsten
+const web3Modal = new Web3Modal({
+  // network: "ropsten",
+  cacheProvider: false,
+  providerOptions
+})
+
+function useNetwork({ setAppMsg }: NetworkProps) {
   const [wallet, setWallet] = useState<string>("---")
   const [network, setNetwork] = useState<string>("---")
   const [account, setAccount] = useState<string>("---")
-  const [theWeb3, setWeb3] = useState<Web3>()
+  const [theWeb3, setWeb3] = useState<any>()
+  const [isConnected, setIsConnected] = useState(false)
 
   useEffect(() => {
     // if ethereum-compatible browsers
@@ -61,7 +83,23 @@ function useNetwork() {
     // web3.currentProvider === window.ethereum
     // https://web3js.readthedocs.io/en/v1.3.4/getting-started.html
     const fallbackWSProviderUrl = "ws://127.0.0.1:9545"
-    const web3_ = new Web3(Web3.givenProvider || fallbackWSProviderUrl)
+
+    // this is using bare Web3
+    // const web3_ = new Web3(Web3.givenProvider || fallbackWSProviderUrl)
+
+    // this is using web3Modal wrapper
+    const provider = await web3Modal.connect()
+
+    setIsConnected(true)
+
+    // use local blockchain for local server with wallet other than MetaMask
+    const isLocal = !provider.isMetaMask && (window.location.hostname === "127.0.0.1")
+
+    if (isLocal)
+      setAppMsg(["info", `Connect to local blockchain for development: ${fallbackWSProviderUrl}`])
+
+    const provider_ = isLocal ? fallbackWSProviderUrl : provider
+    const web3_ = new Web3(provider_)
 
     console.log(`web3 version: ${web3_.version}`)
     setWeb3(web3_)
@@ -69,10 +107,7 @@ function useNetwork() {
     setupNetwork(web3_)
 
     // even if failed to setup account/network, initToDo will succeed
-    await setupAccount(web3_).catch(err => {
-      console.log(err.message)
-      throw err
-    })
+    setupAccount(web3_)
   }
 
   const setupNetwork = async (web3_: Web3) => {
@@ -104,26 +139,28 @@ function useNetwork() {
 
   // https://stackoverflow.com/a/61199795
   const setupAccount = (web3_: Web3) => {
-    // if ethereum-compatible browsers
-    if (typeof window.ethereum !== 'undefined') {
-      // window.ethereum.isConnected() is always true
-
-      // ethereum.enable() equivalent in the latest version
-      // https://web3js.readthedocs.io/en/v1.3.4/web3-eth.html#requestaccounts
-      return web3_.eth.requestAccounts().then(accounts => {
-        setAccount(accounts[0])
-      })
-      // the above request wallet_requestPermissions eth_requestAccounts in web3
-      // https://docs.metamask.io/guide/getting-started.html
-      // await window.ethereum.request({ method: 'eth_requestAccounts' });
-    } else {
-      return web3_.eth.getAccounts().then(accounts => {
-        setAccount(accounts[0])
-      })
-    }
+    web3_.eth.getAccounts().then(accounts => {
+      // use 1st account
+      setAccount(accounts[0])
+    }).catch(err => {
+      console.log(err.message)
+      throw err
+    })
   }
 
-  return [{ wallet, network, account, theWeb3 }, connectNetwork] as const
+  const disconnectNetwork = async () => {
+    if (theWeb3 && theWeb3.currentProvider && theWeb3.currentProvider.close) {
+      await theWeb3.currentProvider.close()
+    }
+    web3Modal.clearCachedProvider()
+
+    setNetwork("---")
+    setAccount("---")
+    setWeb3(undefined)
+    setIsConnected(false)
+  }
+
+  return [{ wallet, network, account, theWeb3, isConnected }, connectNetwork, disconnectNetwork] as const
 }
 
 export default useNetwork

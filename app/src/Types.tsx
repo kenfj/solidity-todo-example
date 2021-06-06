@@ -17,6 +17,10 @@ export type AppMsg = [
 
 type SetAppMsg = Dispatch<SetStateAction<AppMsg>>
 
+export type NetworkProps = {
+  setAppMsg: SetAppMsg,
+}
+
 export type TodoApiProps = {
   theWeb3: Web3 | undefined,
   account: string,

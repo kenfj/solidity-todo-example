@@ -9,10 +9,10 @@ This is simple Todo DApp using Solidity Truffle and React TypeScript
 
 ```bash
 truffle version
-# Truffle v5.3.4 (core: 5.3.4)
+# Truffle v5.3.9 (core: 5.3.9)
 # Solidity - 0.8.3 (solc-js)
 # Node v14.16.1
-# Web3.js v1.3.5
+# Web3.js v1.3.6
 ```
 
 * This ToDo contract has been deployed to Ropsten
@@ -25,8 +25,7 @@ truffle version
 truffle develop
 truffle(develop)> compile
 truffle(develop)> migrate
-
-truffle test
+truffle(develop)> test
 
 # start web app
 cd app
@@ -128,6 +127,17 @@ npm run typechain
 ```bash
 # one shot command to truffle compile and typechain in app
 npm run build
+```
+
+## Using Web3Modal
+
+* https://walletconnect.org/
+* https://github.com/web3modal/web3modal
+* https://github.com/Web3Modal/web3modal/blob/master/docs/providers/walletconnect.md
+
+```bash
+npm install web3modal
+npm install @walletconnect/web3-provider
 ```
 
 ## Deploy to Ropsten test network
