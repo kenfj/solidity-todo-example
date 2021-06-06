@@ -2193,11 +2193,11 @@
       "events": {},
       "links": {},
       "address": "0x8eA5EAE7A0b618F90771A9B3fE85CfAF1C0B4642",
-      "transactionHash": "0x4422f1817a1649352477e3dcc4ca3caeb58863892e6b389dd8fcb85bd6c6eb6b"
+      "transactionHash": "0x9031d60e0ee3e39b417bc897ba10ab52210a66571618d4afcf1c2e6a5c39bb4c"
     }
   },
   "schemaVersion": "3.4.1",
-  "updatedAt": "2021-05-27T08:12:42.361Z",
+  "updatedAt": "2021-06-04T15:18:01.504Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

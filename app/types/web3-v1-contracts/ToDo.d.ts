@@ -54,9 +54,7 @@ export interface ToDo extends BaseContract {
   methods: {
     createTask(_content: string): NonPayableTransactionObject<void>;
 
-    getTask(
-      id: number | string | BN
-    ): NonPayableTransactionObject<{
+    getTask(id: number | string | BN): NonPayableTransactionObject<{
       0: string;
       1: string;
       2: string;
@@ -64,9 +62,7 @@ export interface ToDo extends BaseContract {
       4: string;
     }>;
 
-    getTaskFixtures(
-      id: number | string | BN
-    ): NonPayableTransactionObject<{
+    getTaskFixtures(id: number | string | BN): NonPayableTransactionObject<{
       0: string;
       1: string;
       2: string;
